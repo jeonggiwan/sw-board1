@@ -22,12 +22,12 @@ public class BoardController {
     }
 
     @GetMapping("/reg-form")
-    public String getRegForm(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
+    public String getRegForm(Model model, HttpServletRequest request) {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
         if (member != null) {
             model.addAttribute("board", Board.builder().build());
-            return "/boards/reg-form";
+            return "/boards/reg-form"; // view
         } else
             return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
@@ -36,19 +36,28 @@ public class BoardController {
     public String postBoard(@ModelAttribute("board") Board dto, Model model, HttpServletRequest request) {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
-        // form에서 hidden 전송하는 방식으로 변경
-        dto.setWriterSeq(member.getSeq());
-        dto.setWriterEmail(member.getEmail());
-        dto.setWriterName(member.getName());
+        if(member != null) {
+            // form에서 hidden 전송하는 방식으로 변경
+            dto.setWriterSeq(member.getSeq());
+            dto.setWriterEmail(member.getEmail());
+            dto.setWriterName(member.getName());
 
-        Long bno = Long.valueOf(boardService.registerBoard(dto));
+            Long bno = Long.valueOf(boardService.registerBoard(dto));
 
-        return "redirect:/boards"; // 등록 후 목록 보기
+            return "redirect:/boards"; // 등록 후 목록 보기, redirection, get method
+        }else
+            return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
 
     @GetMapping("")
-    public String getBoards(PageRequestDTO pageRequestDTO, Model model) { // 중간 본 수정
-        model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
+    public String getBoards(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model) { // 중간 본 수정
+        /*
+        if(pageRequestDTO == null)
+            model.addAttribute("pageRequestDTO", PageRequestDTO.builder().build() );
+        else
+
+         */
+            model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
         return "/boards/list";
     }
 
@@ -58,7 +67,7 @@ public class BoardController {
         Board board = boardService.findBoardById(Board.builder().bno(bno).build());
         boardService.updateBoard(board);
         model.addAttribute("dto", boardService.findBoardById(board));
-        return "/boards/read";
+        return "detail";
     }
 
     @GetMapping("/{bno}/up-form")

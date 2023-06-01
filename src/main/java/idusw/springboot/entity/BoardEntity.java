@@ -24,6 +24,7 @@ public class BoardEntity extends BaseEntity {
     private String title;
     @Column(length = 1000, nullable = false)
     private String content;
+
     @ManyToOne
     //@JoinColumn(name = "seq")
     private MemberEntity writer; // BoardEntity : MemberEntity = N : 1,
