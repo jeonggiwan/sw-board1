@@ -25,7 +25,7 @@ public class BoardEntity extends BaseEntity {
     @Column(length = 1000, nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     //@JoinColumn(name = "seq")
     private MemberEntity writer; // BoardEntity : MemberEntity = N : 1,
 

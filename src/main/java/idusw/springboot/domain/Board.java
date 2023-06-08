@@ -27,4 +27,6 @@ public class Board { // 5 fields
     // auditing
     private LocalDateTime regDate;
     private LocalDateTime modDate;
+
+    private Long replyCount;
 }

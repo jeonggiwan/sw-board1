@@ -51,12 +51,12 @@ public class BoardController {
 
     @GetMapping("")
     public String getBoards(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model) { // 중간 본 수정
-        /*
-        if(pageRequestDTO == null)
+        model.addAttribute("list", pageRequestDTO);
+
+        /* if(pageRequestDTO == null)
             model.addAttribute("pageRequestDTO", PageRequestDTO.builder().build() );
         else
-
-         */
+        */
             model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
         return "/boards/list";
     }

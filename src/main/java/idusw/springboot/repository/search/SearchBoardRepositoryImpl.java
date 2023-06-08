@@ -95,8 +95,8 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         tuple.limit(pageable.getPageSize()); // 레코드 수
 
         List<Tuple> result = tuple.fetch(); // 데이터 소스로 부터 정보를 가져옴
-
         long count = tuple.fetchCount(); // 갯수를 확인
+
         return new PageImpl<Object[]>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
     }
 
